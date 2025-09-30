@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -27,6 +28,35 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
+def game_over(screen: pg.Surface):
+    """
+    ゲームオーバー画面を表示し、5秒後にプログラムを終了する。
+    """
+
+    blackout_surf = pg.Surface(screen.get_size())
+    blackout_surf.set_alpha(200)  # 透明度
+    blackout_surf.fill((0, 0, 0)) # 黒
+
+    font = pg.font.Font(None, 80)
+    text_surf = font.render("Game Over", True, (255, 255, 255)) # 白文字
+    text_rct = text_surf.get_rect(center=screen.get_rect().center)
+
+    cry_kk_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 0.9)
+    
+    cry_kk_rct1 = cry_kk_img.get_rect(center=text_rct.center)
+    cry_kk_rct1.right = text_rct.left # 左側
+    cry_kk_rct2 = cry_kk_img.get_rect(center=text_rct.center)
+    cry_kk_rct2.left = text_rct.right # 右側
+
+    screen.blit(blackout_surf, (0, 0)) # ブラックアウト
+    screen.blit(text_surf, text_rct) # "Game Over" を表示
+    screen.blit(cry_kk_img, cry_kk_rct1) # 泣きこうかとん1
+    screen.blit(cry_kk_img, cry_kk_rct2) # 泣きこうかとん2
+
+    pg.display.update()
+    time.sleep(5) #5秒待機
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -49,7 +79,8 @@ def main():
                 return
         screen.blit(bg_img, [0, 0])
         if kk_rct.colliderect(bb_rct):
-            return #ゲームオーバーs
+            game_over(screen)
+            return #ゲームオーバー
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -57,16 +88,7 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]  # 横方向の移動量を加算
                 sum_mv[1] += mv[1]  # 縦方向の移動量を加算
-        # if key_lst[pg.K_w]:
-        #     sum_mv[1] -= 5
-        # if key_lst[pg.K_UP]:
-        #     sum_mv[1] -= 5
-        # if key_lst[pg.K_DOWN]:
-        #     sum_mv[1] += 5
-        # if key_lst[pg.K_LEFT]:
-        #     sum_mv[0] -= 5
-        # if key_lst[pg.K_RIGHT]:
-        #     sum_mv[0] += 5
+        
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
