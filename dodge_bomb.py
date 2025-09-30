@@ -34,7 +34,7 @@ def game_over(screen: pg.Surface, score: int):
     戻り値：最終スコア
     """
     blackout_surface = pg.Surface(screen.get_size())
-    blackout_surface.set_alpha(200) # 透明度
+    blackout_surface.set_alpha(180) # 透明度
     blackout_surface.fill((0, 0, 0)) # 黒
 
     font = pg.font.Font(None, 80)
@@ -70,7 +70,7 @@ def init_bb_assets() -> tuple[list[pg.Surface], list[float]]:
     bb_surfs = []
     accelerations = [a for a in range(1, 11)]
     for r in range(1, 11):
-        bb_surface= pg.Surface((20*r, 20*r)) # 爆弾のSurfaceを作成
+        bb_surface = pg.Surface((20*r, 20*r)) # 爆弾のSurfaceを作成
         pg.draw.circle(bb_surface, (255, 0, 0), (10*r, 10*r), 10*r)
         bb_surface.set_colorkey((0, 0, 0)) # 四隅の黒を透過
         bb_surfs.append(bb_surface)
