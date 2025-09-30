@@ -42,7 +42,7 @@ def game_over(screen: pg.Surface, score: int):
     text_rct = text_surface.get_rect(center=screen.get_rect().center)
 
     score_font = pg.font.Font(None, 60)
-    score_surf = score_font.render(f"Score: {score}", True, (255, 255, 255))
+    score_surf = score_font.render(f"Score: {score}", True, (255, 255, 255)) #黒
     score_rct = score_surf.get_rect(center=screen.get_rect().center)
     score_rct.top = text_rct.bottom + 10
 
